@@ -32,7 +32,7 @@
           window.open(url, "_blank");
 
           // Envia dados para o Google Sheets
-          fetch("https://script.google.com/macros/s/AKfycbwi1-qiESmTzfutMA9jUAUw29iJdP0wAa1u1e2TztNlUr0j7GVCeDFpC6L4G4E-KdIc/exec", {
+          fetch("https://script.google.com/macros/s/AKfycbwwwRmjW6Sic91WrCd-YB0CrHvvloCu36g8yJjwxssK94a0SYiB1SY4bf1ukg4Sr9vw/exec", {
             method: "POST",
             body: JSON.stringify({ placa: placa, lat: lat, lng: lng }),
             headers: { "Content-Type": "application/json" }
