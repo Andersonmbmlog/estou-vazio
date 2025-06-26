@@ -7,11 +7,24 @@
 </head>
 <body style="font-family: Arial; text-align: center; padding: 30px;">
   <h2>🚚 Aviso de Veículo Vazio</h2>
-  <input id="placa" type="text" placeholder="Digite a placa" style="font-size: 20px; padding: 10px; width: 80%; max-width: 300px;" />
+
+  <input id="placa" type="text" placeholder="Digite a placa" 
+         style="font-size: 20px; padding: 10px; width: 80%; max-width: 300px;" />
   <br><br>
-  <button onclick="enviarMensagem()" style="font-size: 20px; padding: 15px 30px;">Estou Vazio</button>
+
+  <button onclick="enviarMensagem()" 
+          style="font-size: 20px; padding: 15px 30px; margin-bottom: 10px;">
+    Estou Vazio
+  </button>
+
+  <br>
+  <button onclick="testarAPI()" style="font-size: 14px; padding: 10px 20px;">
+    🔍 Testar Conexão com Planilha
+  </button>
 
   <script>
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzNYA9SVs3Xn6kzb-tMInv1QmMpxF0fTvmyaa6sIe4CBvgpOc_RzRkJVY7nrMmQV3e4/exec"; // 🔁 Substitua aqui
+
     function enviarMensagem() {
       const placa = document.getElementById('placa').value.toUpperCase();
       if (!placa) {
@@ -31,19 +44,29 @@
           const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
           window.open(url, "_blank");
 
-          // Envia dados para o Google Sheets
-          fetch("https://script.google.com/macros/s/AKfycbwwwRmjW6Sic91WrCd-YB0CrHvvloCu36g8yJjwxssK94a0SYiB1SY4bf1ukg4Sr9vw/exec", {
+          // Envia dados para Google Sheets
+          fetch(URL_SCRIPT, {
             method: "POST",
             body: JSON.stringify({ placa: placa, lat: lat, lng: lng }),
             headers: { "Content-Type": "application/json" }
-          });
-
+          })
+          .then(res => res.text())
+          .then(retorno => console.log("Resposta do script:", retorno))
+          .catch(err => console.error("Erro ao enviar para planilha:", err));
+          
         }, () => {
           alert('Não foi possível obter a localização. Verifique as permissões do navegador.');
         });
       } else {
         alert('Seu navegador não suporta geolocalização.');
       }
+    }
+
+    function testarAPI() {
+      fetch(URL_SCRIPT)
+        .then(res => res.text())
+        .then(texto => alert("Resposta da API: " + texto))
+        .catch(err => alert("Erro ao testar API: " + err));
     }
   </script>
 </body>
