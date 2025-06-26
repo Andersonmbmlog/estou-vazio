@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,11 +23,21 @@
         navigator.geolocation.getCurrentPosition((pos) => {
           const lat = pos.coords.latitude;
           const lng = pos.coords.longitude;
+
+          // Envia mensagem no WhatsApp
           const linkMaps = `https://maps.google.com/?q=${lat},${lng}`;
           const mensagem = `🚚 Veículo ${placa} informou que está VAZIO.\nLocalização: ${linkMaps}`;
           const numero = "5519998501102";
           const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
           window.open(url, "_blank");
+
+          // Envia dados para o Google Sheets
+          fetch("https://script.google.com/macros/s/COLE_AQUI_A_SUA_URL/exec", {
+            method: "POST",
+            body: JSON.stringify({ placa: placa, lat: lat, lng: lng }),
+            headers: { "Content-Type": "application/json" }
+          });
+
         }, () => {
           alert('Não foi possível obter a localização. Verifique as permissões do navegador.');
         });
